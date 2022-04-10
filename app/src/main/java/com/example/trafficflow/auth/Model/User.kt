@@ -25,4 +25,6 @@ data class User(
     @SerializedName("updated_at")
     val updatedAt: String,
     val username: Any
-)
+) {
+    constructor() : this("", "", "", "", "", -1, 0, "", "", 0, "", "", "")
+}

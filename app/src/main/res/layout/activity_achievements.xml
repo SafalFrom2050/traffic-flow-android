@@ -6,28 +6,66 @@
     android:layout_height="match_parent"
     tools:context=".AchievementsActivity">
 
-    <TextView
-        android:id="@+id/labelTitle"
-        android:layout_width="wrap_content"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:text="Achievements"
-        android:textSize="16sp"
-        android:textStyle="bold"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="Achievements" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imageRewards"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:shapeAppearance="@style/RoundedImageView"
+        app:srcCompat="@color/secondary" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/imageRewards"
+        app:layout_constraintEnd_toEndOf="@+id/imageRewards"
+        app:layout_constraintStart_toStartOf="@+id/imageRewards"
+        app:layout_constraintTop_toTopOf="@+id/imageRewards">
+
+        <ImageView
+            android:id="@+id/iconAchievement"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:srcCompat="@drawable/ic_achievement" />
+
+        <TextView
+            android:id="@+id/labelReward"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
+            android:text="5"
+            android:textSize="16sp"
+            android:textStyle="bold|italic" />
+
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvAchievements"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/labelTitle"
+        app:layout_constraintTop_toBottomOf="@+id/imageRewards"
         tools:listitem="@layout/rv_item_achievement" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -60,6 +60,7 @@ class UserRepository() {
 
         if (response.isSuccessful) {
             authResponseLiveData.value = response.body()
+            RetrofitInstance.currentUser = response.body()!!.user!!
             setAccessTokenToSP(context, response.body()?.accessToken!!)
             return true
         } else {
@@ -100,6 +101,7 @@ class UserRepository() {
 
         if (response.isSuccessful) {
             authResponseLiveData.value = response.body()
+            RetrofitInstance.currentUser = response.body()!!.user!!
             setAccessTokenToSP(context, response.body()?.accessToken!!)
             return true
         } else {

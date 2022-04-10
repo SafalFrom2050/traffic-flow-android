@@ -2,6 +2,7 @@ package com.example.trafficflow
 
 import android.content.Context
 import com.example.trafficflow.auth.AuthApi
+import com.example.trafficflow.auth.Model.User
 import com.example.trafficflow.auth.Repository.UserRepository
 import com.example.trafficflow.ui.achievements.AchievementApi
 import com.example.trafficflow.ui.bottomsheets.IncidentTypeApi
@@ -11,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 object RetrofitInstance {
     val authApi: AuthApi by lazy {
         Retrofit.Builder()
-            .baseUrl("http://192.168.1.66:8000/api/")
+            .baseUrl("http://192.168.1.68:8000/api/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(AuthApi::class.java)
@@ -19,7 +20,7 @@ object RetrofitInstance {
 
     val incidentTypeApi: IncidentTypeApi by lazy {
         Retrofit.Builder()
-            .baseUrl("http://192.168.1.66:8000/api/")
+            .baseUrl("http://192.168.1.68:8000/api/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(IncidentTypeApi::class.java)
@@ -27,7 +28,7 @@ object RetrofitInstance {
 
     val achievementApi: AchievementApi by lazy {
         Retrofit.Builder()
-            .baseUrl("http://192.168.1.66:8000/api/")
+            .baseUrl("http://192.168.1.68:8000/api/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(AchievementApi::class.java)
@@ -40,4 +41,5 @@ object RetrofitInstance {
         return accessToken
     }
 
+    var currentUser: User = User()
 }

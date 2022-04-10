@@ -25,8 +25,20 @@ class AchievementsActivity : AppCompatActivity() {
 
         viewModel.getAchievements()
 
+
+        setUpToolbar()
+        setUpRewards()
         setUpRV()
         setErrorMessages()
+    }
+
+    private fun setUpToolbar() {
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
+    private fun setUpRewards() {
+        binding.labelReward.text = RetrofitInstance.currentUser.rewardPoints.toString()
     }
 
     private fun setUpRV() {

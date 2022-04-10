@@ -4,8 +4,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.trafficflow.R
+import com.example.trafficflow.RetrofitInstance
 import com.example.trafficflow.ui.achievements.Model.Achievement
 
 class AchievementsAdapter(private val achievementList: List<Achievement>):
@@ -24,6 +26,10 @@ class AchievementsAdapter(private val achievementList: List<Achievement>):
         holder.labelName.text = achievementList[position].name
         holder.labelLevel.text = achievementList[position].level.toString()
         holder.labelRequiredPoints.text = achievementList[position].pointsRequired.toString()
+
+        if (RetrofitInstance.currentUser.rewardPoints >= achievementList[position].pointsRequired) {
+            holder.layout.setBackgroundColor(holder.layout.context.resources.getColor(R.color.secondary))
+        }
     }
 
     override fun getItemCount(): Int {
@@ -31,6 +37,7 @@ class AchievementsAdapter(private val achievementList: List<Achievement>):
     }
 
     class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
+        val layout = view.findViewById<ConstraintLayout>(R.id.layoutAchievementItem)
         val labelName = view.findViewById<TextView>(R.id.labelName)
         val labelRequiredPoints = view.findViewById<TextView>(R.id.labelRequiredPoints)
         val labelLevel = view.findViewById<TextView>(R.id.labelLevel)

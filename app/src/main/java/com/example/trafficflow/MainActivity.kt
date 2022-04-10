@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -66,6 +67,8 @@ class MainActivity : AppCompatActivity() {
         val profileImage: ImageView? = dialog.findViewById<ImageView>(R.id.imageProfileLarge)
         val y = Glide.with(this).load("https://images.pexels.com/photos/1081685/pexels-photo-1081685.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1")
             .apply(RequestOptions.circleCropTransform()).into(profileImage!!)
+
+        dialog.findViewById<TextView>(R.id.labelRewards)?.text = RetrofitInstance.currentUser.rewardPoints.toString()
 
         dialog.findViewById<View>(R.id.menuAchievement)?.setOnClickListener {
             val i = Intent(this, AchievementsActivity::class.java)
