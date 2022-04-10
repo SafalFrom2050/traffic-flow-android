@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.trafficflow.R
+import com.example.trafficflow.RetrofitInstance
 import com.example.trafficflow.ui.bottomsheets.Model.IncidentType
 
 class IncidentTypesAdapter(private val incidentTypeList: List<IncidentType>) :
@@ -26,7 +27,7 @@ class IncidentTypesAdapter(private val incidentTypeList: List<IncidentType>) :
         holder.nameIncident.text = incidentTypeList[position].name
 
         val y = Glide.with(holder.itemView.context)
-            .load("https://images.pexels.com/photos/1081685/pexels-photo-1081685.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1")
+            .load(RetrofitInstance.BASE_URL+incidentTypeList[position].image)
             .into(holder.imageIncident)
     }
 

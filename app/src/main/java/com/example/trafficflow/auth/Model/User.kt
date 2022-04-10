@@ -8,6 +8,9 @@ data class User(
     val dob: String,
     val email: String,
 
+    @SerializedName("profile_image")
+    val profileImage: String,
+
     @SerializedName("email_verified_at")
     val emailVerifiedAt: String,
     val fname: String,
@@ -26,5 +29,5 @@ data class User(
     val updatedAt: String,
     val username: Any
 ) {
-    constructor() : this("", "", "", "", "", -1, 0, "", "", 0, "", "", "")
+    constructor() : this("", "", "", "","", "", -1, 0, "", "", 0, "", "", "")
 }

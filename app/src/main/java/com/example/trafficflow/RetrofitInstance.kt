@@ -10,9 +10,12 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitInstance {
+
+    const val BASE_URL = "http://192.168.1.68:8000/"
+
     val authApi: AuthApi by lazy {
         Retrofit.Builder()
-            .baseUrl("http://192.168.1.68:8000/api/")
+            .baseUrl(BASE_URL + "api/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(AuthApi::class.java)
@@ -20,7 +23,7 @@ object RetrofitInstance {
 
     val incidentTypeApi: IncidentTypeApi by lazy {
         Retrofit.Builder()
-            .baseUrl("http://192.168.1.68:8000/api/")
+            .baseUrl(BASE_URL + "api/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(IncidentTypeApi::class.java)
@@ -28,7 +31,7 @@ object RetrofitInstance {
 
     val achievementApi: AchievementApi by lazy {
         Retrofit.Builder()
-            .baseUrl("http://192.168.1.68:8000/api/")
+            .baseUrl(BASE_URL + "api/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(AchievementApi::class.java)
