@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/login_navigation"
+    app:startDestination="@id/fragment_login">
+    <fragment
+        android:id="@+id/fragment_login"
+        android:name="com.example.trafficflow.auth.View.LoginFragment"
+        android:label="LoginFragment" >
+        <action
+            android:id="@+id/action_to_register"
+            app:destination="@id/fragment_register"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/fragment_register"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_register"
+        android:name="com.example.trafficflow.auth.View.RegisterFragment"
+        android:label="RegisterFragment" >
+        <action
+            android:id="@+id/action_to_login"
+            app:destination="@id/fragment_login"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/fragment_login"
+            app:popUpToInclusive="true" />
+    </fragment>
+</navigation>

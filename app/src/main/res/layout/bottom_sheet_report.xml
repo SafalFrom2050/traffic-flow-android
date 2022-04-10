@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:theme="@style/Theme.TrafficFlow"
+    app:cardCornerRadius="16dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/shapeableImageView"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="@style/RoundedImageView"
+            app:srcCompat="@color/secondary" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@+id/shapeableImageView"
+            app:layout_constraintTop_toTopOf="@+id/shapeableImageView">
+
+            <ImageView
+                android:id="@+id/iconAchievement"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:srcCompat="@drawable/ic_achievement" />
+
+            <TextView
+                android:id="@+id/labelReward"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:text="5"
+                android:textSize="16sp"
+                android:textStyle="bold|italic" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/titleLinearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/shapeableImageView">
+
+            <ImageView
+                android:id="@+id/iconReport"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_report" />
+
+            <TextView
+                android:id="@+id/labelTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:paddingVertical="16dp"
+                android:text="Report Road Incidents"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvIncidentTypes"
+            android:layout_width="wrap_content"
+            android:layout_height="270dp"
+            app:layoutManager="GridLayoutManager"
+            app:layout_constraintBottom_toTopOf="@+id/switchTripMode"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/titleLinearLayout"
+            app:spanCount="3"
+            tools:listitem="@layout/rv_item_incident_type">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switchTripMode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/trip_switch_background"
+            android:drawableStart="@drawable/ic_trip_dark"
+            android:drawablePadding="16dp"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:paddingHorizontal="40dp"
+            android:paddingTop="32dp"
+            android:paddingBottom="32dp"
+            android:text="Trip Mode"
+            android:textColor="@color/background_dark"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rvIncidentTypes"
+            app:showText="false"
+            app:thumbTint="@color/background_dark" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</com.google.android.material.card.MaterialCardView>

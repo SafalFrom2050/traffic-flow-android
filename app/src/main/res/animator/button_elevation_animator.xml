@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_enabled="true" android:state_selected="true">
+        <set>
+        <objectAnimator
+            android:duration="@android:integer/config_shortAnimTime"
+            android:propertyName="translationX"
+            android:valueTo="-40dp" />
+
+            <objectAnimator
+                android:duration="@android:integer/config_shortAnimTime"
+                android:propertyName="scaleX"
+                android:valueTo="1.5"
+                android:valueType="floatType"/>
+
+            <objectAnimator
+                android:duration="@android:integer/config_shortAnimTime"
+                android:propertyName="scaleY"
+                android:valueTo="1.5"
+                android:valueType="floatType" />
+        </set>
+    </item>
+
+
+
+    <item>
+        <set>
+        <objectAnimator
+            android:duration="@android:integer/config_mediumAnimTime"
+            android:propertyName="translationX"
+            android:valueTo="0dp" />
+
+            <objectAnimator
+                android:duration="@android:integer/config_shortAnimTime"
+                android:propertyName="scaleX"
+                android:valueTo="1" />
+
+            <objectAnimator
+                android:duration="@android:integer/config_shortAnimTime"
+                android:propertyName="scaleY"
+                android:valueTo="1" />
+        </set>
+    </item>
+</selector>

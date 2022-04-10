@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="error_appearance" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/error</item>
+        <item name="android:textSize">12sp</item>
+        <item name="boxStrokeErrorColor">@color/error</item>
+        <item name="errorIconTint">@color/error</item>
+    </style>
+
+    <style name="RoundedImageView">
+        <item name="cornerSize">50%</item>
+    </style>
+</resources>
