@@ -1,5 +1,6 @@
 package com.example.trafficflow.ui.bottomsheets.Model
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
 data class IncidentType(

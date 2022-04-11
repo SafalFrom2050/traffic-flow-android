@@ -15,6 +15,6 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="tab_text_1">Traffic Levels</string>
     <string name="tab_text_2">Incident Reports</string>
-    
+
     <string name="mapbox_access_token">pk.eyJ1Ijoic2FmYWxmcm9tMjA1MCIsImEiOiJja3RiZGg4OGUxdW0yMnZucjd1anUzb2sxIn0.boXjDw3dQg-zI-rLKA8W1w</string>
 </resources>

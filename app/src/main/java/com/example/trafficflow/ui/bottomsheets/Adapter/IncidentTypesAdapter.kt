@@ -11,16 +11,18 @@ import com.example.trafficflow.R
 import com.example.trafficflow.RetrofitInstance
 import com.example.trafficflow.ui.bottomsheets.Model.IncidentType
 
-class IncidentTypesAdapter(private val incidentTypeList: List<IncidentType>) :
+class IncidentTypesAdapter(
+    private val incidentTypeList: List<IncidentType>,
+    private val onItemClicked: (incidentType: IncidentType) -> Unit
+) :
     RecyclerView.Adapter<IncidentTypesAdapter.ViewHolder>() {
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view =
             LayoutInflater.from(parent.context)
                 .inflate(R.layout.rv_item_incident_type, parent, false)
 
-        return ViewHolder(view)
+        return ViewHolder(view, incidentTypeList, onItemClicked)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -35,8 +37,19 @@ class IncidentTypesAdapter(private val incidentTypeList: List<IncidentType>) :
         return incidentTypeList.size
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ViewHolder(itemView: View, val incidentTypeList: List<IncidentType>, private val onItemClicked: (incidentType: IncidentType) -> Unit)
+        : RecyclerView.ViewHolder(itemView), View.OnClickListener {
         val imageIncident = itemView.findViewById<ImageView>(R.id.imageIncident)
         val nameIncident = itemView.findViewById<TextView>(R.id.nameIncident)
+
+        init {
+            itemView.setOnClickListener(this)
+        }
+
+        override fun onClick(v: View?) {
+            if (v != null) {
+                onItemClicked(incidentTypeList[adapterPosition])
+            }
+        }
     }
 }

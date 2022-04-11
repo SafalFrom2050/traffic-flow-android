@@ -1,5 +1,6 @@
 package com.example.trafficflow.ui.bottomsheets.View
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,7 +8,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.trafficflow.R
+import com.example.trafficflow.*
 import com.example.trafficflow.ui.bottomsheets.Adapter.IncidentTypesAdapter
 import com.example.trafficflow.ui.bottomsheets.Model.IncidentType
 import com.example.trafficflow.ui.bottomsheets.ViewModel.ReportBottomSheetViewModel
@@ -50,7 +51,13 @@ class ReportBottomSheetFragment: BottomSheetDialogFragment() {
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
 
         val incidents = ArrayList<IncidentType>()
-        val adapter = IncidentTypesAdapter(incidents)
+        val adapter = IncidentTypesAdapter(incidents) {
+            val i = Intent(requireContext(), ReportActivity::class.java)
+            i.putExtra(INCIDENT_ID, it.id.toString())
+            i.putExtra(INCIDENT_NAME, it.name.toString())
+            i.putExtra(INCIDENT_IMAGE_URL, it.image.toString())
+            startActivity(i)
+        }
 
         viewModel.incidentTypesRepository.incidentTypeResponseLiveData.observe(viewLifecycleOwner) {
             if (it.incident_types != null) {
@@ -60,6 +67,8 @@ class ReportBottomSheetFragment: BottomSheetDialogFragment() {
         }
 
         recyclerView.adapter = adapter
+
+
     }
 
     private fun setErrorMessages() {

@@ -16,6 +16,9 @@
         android:theme="@style/Theme.TrafficFlow"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ReportActivity"
+            android:exported="false" />
+        <activity
             android:name=".AchievementsActivity"
             android:exported="false" />
         <activity

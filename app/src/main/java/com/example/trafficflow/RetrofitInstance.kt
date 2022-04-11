@@ -6,6 +6,7 @@ import com.example.trafficflow.auth.Model.User
 import com.example.trafficflow.auth.Repository.UserRepository
 import com.example.trafficflow.ui.achievements.AchievementApi
 import com.example.trafficflow.ui.bottomsheets.IncidentTypeApi
+import com.example.trafficflow.ui.incident.IncidentApi
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -27,6 +28,14 @@ object RetrofitInstance {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(IncidentTypeApi::class.java)
+    }
+
+    val incidentApi: IncidentApi by lazy {
+        Retrofit.Builder()
+            .baseUrl(BASE_URL + "api/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(IncidentApi::class.java)
     }
 
     val achievementApi: AchievementApi by lazy {
