@@ -14,7 +14,7 @@ data class User(
     @SerializedName("email_verified_at")
     val emailVerifiedAt: String,
     val fname: String,
-    val id: Int,
+    val id: Int?,
 
     @SerializedName("is_approved")
     val isApproved: Int,
@@ -29,5 +29,5 @@ data class User(
     val updatedAt: String,
     val username: Any
 ) {
-    constructor() : this("", "", "", "","", "", -1, 0, "", "", 0, "", "", "")
+    constructor() : this("", "", "", "","", "", null, 0, "", "", 0, "", "", "")
 }

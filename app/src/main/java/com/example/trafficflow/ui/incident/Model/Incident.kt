@@ -24,6 +24,6 @@ data class Incident(
         device_identifier: String,
         severity: Int,
         incident_type_id: Int,
-        user_id: Int
+        user_id: Int?
     ): this(null, name, description, latitude, longitude, device_identifier, severity, incident_type_id, user_id, null, null)
 }

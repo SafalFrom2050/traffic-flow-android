@@ -12,14 +12,5 @@ class AuthActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
-
-
-        // TODO: Move to Splash Screen
-        val accessToken = RetrofitInstance.setAccessToken(this)
-
-        if (accessToken != "") {
-            val i = Intent(this, MainActivity::class.java)
-            startActivity(i)
-        }
     }
 }

@@ -82,6 +82,7 @@ class LoginFragment : Fragment() {
             if (authResponse.accessToken != null) {
                 val i = Intent(context, MainActivity::class.java)
                 startActivity(i)
+                requireActivity().finish()
             }
         }
 

@@ -13,6 +13,14 @@ import retrofit2.converter.gson.GsonConverterFactory
 object RetrofitInstance {
 
     const val BASE_URL = "http://192.168.1.68:8000/"
+    var accessToken: String = ""
+    var currentUser: User = User()
+
+
+    fun retrieveAccessToken(context: Context): String {
+        accessToken = "Bearer " + UserRepository().getAccessTokenFromSP(context).toString()
+        return accessToken
+    }
 
     val authApi: AuthApi by lazy {
         Retrofit.Builder()
@@ -45,13 +53,4 @@ object RetrofitInstance {
             .build()
             .create(AchievementApi::class.java)
     }
-
-    var accessToken: String = ""
-
-    fun setAccessToken(context: Context): String {
-        accessToken = "Bearer " + UserRepository().getAccessTokenFromSP(context).toString()
-        return accessToken
-    }
-
-    var currentUser: User = User()
 }

@@ -2,13 +2,17 @@ package com.example.trafficflow
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.trafficflow.auth.Model.User
+import com.example.trafficflow.auth.Repository.UserRepository
+import com.example.trafficflow.auth.View.AuthActivity
 import com.example.trafficflow.databinding.ActivityMainBinding
 import com.example.trafficflow.ui.base.ViewPagerNoSwipe
 import com.example.trafficflow.ui.bottomsheets.View.ReportBottomSheetFragment
@@ -19,6 +23,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.mapbox.navigation.base.options.NavigationOptions
 import com.mapbox.navigation.core.MapboxNavigationProvider
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,6 +31,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        checkAuth()
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -54,6 +61,29 @@ class MainActivity : AppCompatActivity() {
         binding.fab.setOnClickListener {
             showReportPage()
         }
+    }
+
+    private fun checkAuth() {
+        val accessToken = RetrofitInstance.retrieveAccessToken(this)
+
+        Log.d("MainActivity", "Access Token: $accessToken")
+        val userRepository = UserRepository()
+        if (accessToken != ""){
+            if (RetrofitInstance.currentUser.id == null){
+                lifecycleScope.launch {
+                    val result = userRepository.getCurrentUser(this@MainActivity)
+                    if (!result) redirectAuthActivity()
+                }
+            }
+        }else{
+            redirectAuthActivity()
+        }
+    }
+
+    private fun redirectAuthActivity() {
+        val i = Intent(this, AuthActivity::class.java)
+        startActivity(i)
+        finish()
     }
 
     private fun showAccountDialog(profileBtn: View){

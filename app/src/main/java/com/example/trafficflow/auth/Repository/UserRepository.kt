@@ -7,6 +7,7 @@ import com.example.trafficflow.RetrofitInstance
 import com.example.trafficflow.auth.Model.AuthResponse
 import com.example.trafficflow.auth.Model.LoginModel
 import com.example.trafficflow.auth.Model.RegisterModel
+import com.example.trafficflow.auth.Model.User
 import com.example.trafficflow.auth.View.LoginFragment
 import com.google.gson.Gson
 import org.json.JSONObject
@@ -21,6 +22,7 @@ class UserRepository() {
 
     val isLoadingLiveData = MutableLiveData<Boolean>(false)
     val authResponseLiveData = MutableLiveData<AuthResponse>()
+    val userResponseLiveData = MutableLiveData<User>()
 
     fun getAccessTokenFromSP(context: Context): String? {
         val sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE)
@@ -108,6 +110,33 @@ class UserRepository() {
             val jsonObj = JSONObject(response.errorBody()!!.charStream().readText())
             authResponseLiveData.value =
                 Gson().fromJson(jsonObj.toString(), AuthResponse::class.java)
+        }
+
+        return false
+    }
+
+    suspend fun getCurrentUser(context: Context): Boolean {
+
+        isLoadingLiveData.value = true
+
+        val response = try {
+            RetrofitInstance.authApi.getCurrentUser(RetrofitInstance.accessToken)
+        } catch (e: IOException) {
+            Log.e(TAG, "IO Exception: " + e.message)
+            postUnexpectedError(true, "" + e.message)
+            return false
+        } catch (e: HttpException) {
+            Log.e(TAG, "Http Exception")
+            postUnexpectedError(true)
+            return false
+        }
+
+        isLoadingLiveData.value = false
+
+        if (response.isSuccessful) {
+            userResponseLiveData.value = response.body()
+            RetrofitInstance.currentUser = response.body()!!
+            return true
         }
 
         return false

@@ -3,10 +3,9 @@ package com.example.trafficflow.auth
 import com.example.trafficflow.auth.Model.AuthResponse
 import com.example.trafficflow.auth.Model.LoginModel
 import com.example.trafficflow.auth.Model.RegisterModel
+import com.example.trafficflow.auth.Model.User
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.Headers
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface AuthApi {
 
@@ -23,4 +22,11 @@ interface AuthApi {
     )
     @POST("user/signup/")
     suspend fun register(@Body registerModel: RegisterModel): Response<AuthResponse>
+
+    @Headers(
+        "Accept: application/json",
+        "User-Agent: TrafficFlow",
+    )
+    @GET("user")
+    suspend fun getCurrentUser(@Header("Authorization") accessToken: String): Response<User>
 }

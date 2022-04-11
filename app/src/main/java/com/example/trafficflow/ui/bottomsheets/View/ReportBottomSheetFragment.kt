@@ -67,8 +67,6 @@ class ReportBottomSheetFragment: BottomSheetDialogFragment() {
         }
 
         recyclerView.adapter = adapter
-
-
     }
 
     private fun setErrorMessages() {
