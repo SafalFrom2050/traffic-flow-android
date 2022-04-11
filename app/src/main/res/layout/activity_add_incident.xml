@@ -10,7 +10,7 @@
         android:id="@+id/labelLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="128dp"
+        android:layout_marginTop="32dp"
         android:text="Add Incident"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,45 +27,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/labelLogin" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/inputLayoutName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <com.mapbox.maps.MapView
+        android:id="@+id/mapView"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
-        android:hint="Name"
-        app:boxBackgroundColor="?attr/colorOnBackground"
-        app:boxBackgroundMode="filled"
-        app:boxCornerRadiusBottomEnd="12dp"
-        app:boxCornerRadiusBottomStart="12dp"
-        app:boxCornerRadiusTopEnd="12dp"
-        app:boxCornerRadiusTopStart="12dp"
-        app:boxStrokeErrorColor="@color/error"
-        app:boxStrokeWidth="0dp"
-        app:boxStrokeWidthFocused="0dp"
-        app:errorIconTint="@color/error"
-        app:errorTextAppearance="@style/error_appearance"
-        app:errorTextColor="@color/error"
-        app:hintTextColor="?android:attr/colorForeground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/fieldName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10" />
-
-    </com.google.android.material.textfield.TextInputLayout>
+        app:layout_constraintTop_toBottomOf="@+id/include"
+        app:mapbox_cameraZoom="15" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layoutDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
         android:hint="Description"
         app:boxBackgroundColor="?attr/colorOnBackground"
@@ -83,27 +62,39 @@
         app:hintTextColor="?android:attr/colorForeground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputLayoutName">
+        app:layout_constraintTop_toBottomOf="@+id/mapView">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/fieldDescription"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="100dp"
             android:ems="10"
             android:gravity="start|top"
             android:inputType="textMultiLine" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_weight="1"
+        android:text="Severity:"
+        app:layout_constraintEnd_toEndOf="@+id/severityRangeSlider"
+        app:layout_constraintStart_toStartOf="@+id/severityRangeSlider"
+        app:layout_constraintTop_toBottomOf="@+id/layoutDescription" />
+
     <com.google.android.material.slider.Slider
         android:id="@+id/severityRangeSlider"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:valueFrom="1"
+        android:valueTo="3"
         app:haloColor="@color/accent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layoutDescription"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
         app:thumbRadius="0dp"
         app:trackHeight="32dp" />
 
@@ -111,7 +102,8 @@
         android:id="@+id/btnSubmit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
+        android:enabled="false"
         android:text="Submit"
         android:textColor="@color/background_dark"
         app:cornerRadius="6dp"

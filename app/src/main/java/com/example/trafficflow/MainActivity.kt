@@ -1,6 +1,7 @@
 package com.example.trafficflow
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -32,6 +33,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        PermissionManager(this).askPermissions()
         checkAuth()
 
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -110,13 +112,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showReportPage() {
-//        val dialog = BottomSheetDialog(this, R.style.DialogTheme)
-//        val view = layoutInflater.inflate(R.layout.bottom_sheet_report, null)
-//        dialog.setContentView(view)
-//        dialog.show()
-//
-//        setUpReportPageRV(dialog)
-
         val reportBottomSheetFragment = ReportBottomSheetFragment()
         reportBottomSheetFragment.show(supportFragmentManager, reportBottomSheetFragment.tag)
     }
@@ -128,5 +123,12 @@ class MainActivity : AppCompatActivity() {
             .accessToken(resources.getString(R.string.mapbox_access_token))
             .build()
         val mapboxNavigation = MapboxNavigationProvider.create(navigationOptions)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int,
+                                            permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        PermissionManager(this@MainActivity).handlePermissionResponse(requestCode, grantResults)
     }
 }
