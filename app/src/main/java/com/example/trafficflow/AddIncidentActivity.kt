@@ -16,6 +16,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.example.trafficflow.databinding.ActivityAddIncidentBinding
 import com.example.trafficflow.ui.incident.Model.Incident
 import com.example.trafficflow.ui.incident.Repository.IncidentRepository
@@ -141,7 +143,7 @@ class ReportActivity : AppCompatActivity(), View.OnClickListener, OnMapClickList
             )
         }
         locationComponentPlugin.addOnIndicatorPositionChangedListener(onIndicatorPositionChangedListener)
-        //locationComponentPlugin.addOnIndicatorBearingChangedListener(onIndicatorBearingChangedListener)
+//        locationComponentPlugin.addOnIndicatorBearingChangedListener(onIndicatorBearingChangedListener)
     }
 
     override fun onMapClick(point: Point): Boolean {
@@ -150,52 +152,24 @@ class ReportActivity : AppCompatActivity(), View.OnClickListener, OnMapClickList
         annotationManager.cleanup()
         val pointAnnotationManager = annotationManager.createPointAnnotationManager()
 
-        val pointAnnotationOptions: PointAnnotationOptions = PointAnnotationOptions()
-            .withPoint(point)
-            .withIconImage(bitmapFromDrawableRes(this, R.drawable.ic_locate)!!)
-            .withIconSize(2.0)
-            .withDraggable(true)
+        Glide.with(this).asBitmap().load(RetrofitInstance.BASE_URL + "storage/images/default-marker.png").into(object : CustomTarget<Bitmap?>() {
+            override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap?>?) {
+                val pointAnnotationOptions: PointAnnotationOptions = PointAnnotationOptions()
+                    .withPoint(point)
+                    .withIconImage(resource)
+                    .withIconSize(1.0)
+                    .withDraggable(true)
 
-        pointAnnotationManager.create(pointAnnotationOptions)
+                pointAnnotationManager.create(pointAnnotationOptions)
+            }
+            override fun onLoadCleared(placeholder: Drawable?) {}
+        })
 
         locationPoint = point
         binding.btnSubmit.isEnabled = true
 
         return true
     }
-
-    private fun bitmapFromDrawableRes(context: Context, @DrawableRes resourceId: Int) =
-        convertDrawableToBitmap(AppCompatResources.getDrawable(context, resourceId))
-
-    private fun convertDrawableToBitmap(sourceDrawable: Drawable?): Bitmap? {
-        if (sourceDrawable == null) {
-            return null
-        }
-        return if (sourceDrawable is BitmapDrawable) {
-            sourceDrawable.bitmap
-        } else {
-// copying drawable object to not manipulate on the same reference
-            val constantState = sourceDrawable.constantState ?: return null
-            val drawable = constantState.newDrawable().mutate()
-            val bitmap: Bitmap = Bitmap.createBitmap(
-                drawable.intrinsicWidth, drawable.intrinsicHeight,
-                Bitmap.Config.ARGB_8888
-            )
-            val canvas = Canvas(bitmap)
-            drawable.setBounds(0, 0, canvas.width, canvas.height)
-            drawable.draw(canvas)
-            bitmap
-        }
-    }
-
-
-
-
-
-
-
-
-
 
     private fun setupGesturesListener() {
         binding.mapView.gestures.addOnMapClickListener(this)

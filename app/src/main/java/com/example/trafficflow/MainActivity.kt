@@ -109,6 +109,11 @@ class MainActivity : AppCompatActivity() {
             val i = Intent(this, AchievementsActivity::class.java)
             startActivity(i)
         }
+
+        dialog.findViewById<View>(R.id.menuEditProfile)?.setOnClickListener{
+            val i = Intent(this, EditProfileActivity::class.java)
+            startActivity(i)
+        }
     }
 
     private fun showReportPage() {

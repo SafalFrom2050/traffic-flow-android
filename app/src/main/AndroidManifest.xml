@@ -17,6 +17,9 @@
         android:theme="@style/Theme.TrafficFlow"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".EditProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".ReportActivity"
             android:exported="false" />
         <activity
@@ -25,9 +28,8 @@
         <activity
             android:name=".MainActivity"
             android:configChanges="uiMode"
-            android:label="@string/title_activity_main"
-            android:theme="@style/Theme.TrafficFlow.NoActionBar"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.TrafficFlow.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -36,9 +38,7 @@
         </activity>
         <activity
             android:name=".auth.View.AuthActivity"
-            android:exported="true">
-
-        </activity>
+            android:exported="true"></activity>
     </application>
 
 </manifest>

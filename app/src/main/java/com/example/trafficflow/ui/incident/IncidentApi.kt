@@ -13,4 +13,12 @@ interface IncidentApi {
     )
     @POST("incidents")
     suspend fun addIncident(@Header("Authorization") accessToken: String, @Body incident: Incident): Response<AddIncidentResponse>
+
+
+    @Headers(
+        "Accept: application/json",
+        "User-Agent: TrafficFlow",
+    )
+    @GET("incidents")
+    suspend fun getIncidents(@Header("Authorization") accessToken: String): Response<IncidentResponse>
 }

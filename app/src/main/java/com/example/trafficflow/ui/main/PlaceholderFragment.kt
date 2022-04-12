@@ -7,6 +7,7 @@ import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,8 +17,15 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.example.trafficflow.R
+import com.example.trafficflow.RetrofitInstance
 import com.example.trafficflow.databinding.FragmentMainBinding
+import com.example.trafficflow.ui.incident.Model.Incident
+import com.example.trafficflow.ui.incident.Repository.IncidentRepository
 import com.mapbox.android.core.location.LocationEngine
 import com.mapbox.android.gestures.MoveGestureDetector
 import com.mapbox.geojson.Point
@@ -36,11 +44,12 @@ import com.mapbox.maps.plugin.locationcomponent.OnIndicatorBearingChangedListene
 import com.mapbox.maps.plugin.locationcomponent.OnIndicatorPositionChangedListener
 import com.mapbox.maps.plugin.locationcomponent.location
 import com.mapbox.maps.plugin.overlay.mapboxOverlay
+import kotlinx.coroutines.launch
 
 /**
  * A placeholder fragment containing a simple view.
  */
-class PlaceholderFragment : Fragment(), OnMapClickListener {
+class PlaceholderFragment : Fragment() {
 
     private lateinit var pageViewModel: PageViewModel
 
@@ -78,6 +87,8 @@ class PlaceholderFragment : Fragment(), OnMapClickListener {
         initLocationComponent()
         setupGesturesListener()
         //
+
+        getIncidents()
     }
 
     private fun initLocationComponent() {
@@ -107,50 +118,45 @@ class PlaceholderFragment : Fragment(), OnMapClickListener {
         //locationComponentPlugin.addOnIndicatorBearingChangedListener(onIndicatorBearingChangedListener)
     }
 
-    override fun onMapClick(point: Point): Boolean {
+    private fun getIncidents(){
+        val incidentRepository = IncidentRepository()
 
-        val annotationManager = binding.mapView.annotations
-        annotationManager.cleanup()
-        val pointAnnotationManager = annotationManager.createPointAnnotationManager()
-
-        val pointAnnotationOptions: PointAnnotationOptions = PointAnnotationOptions()
-            .withPoint(point)
-            .withIconImage(bitmapFromDrawableRes(requireContext(), R.drawable.ic_locate)!!)
-            .withIconSize(2.0)
-            .withDraggable(true)
-
-        pointAnnotationManager.create(pointAnnotationOptions)
-
-        return true
-    }
-
-    private fun bitmapFromDrawableRes(context: Context, @DrawableRes resourceId: Int) =
-        convertDrawableToBitmap(AppCompatResources.getDrawable(context, resourceId))
-
-    private fun convertDrawableToBitmap(sourceDrawable: Drawable?): Bitmap? {
-        if (sourceDrawable == null) {
-            return null
+        lifecycleScope.launch {
+            incidentRepository.getIncidents()
         }
-        return if (sourceDrawable is BitmapDrawable) {
-            sourceDrawable.bitmap
-        } else {
-// copying drawable object to not manipulate on the same reference
-            val constantState = sourceDrawable.constantState ?: return null
-            val drawable = constantState.newDrawable().mutate()
-            val bitmap: Bitmap = Bitmap.createBitmap(
-                drawable.intrinsicWidth, drawable.intrinsicHeight,
-                Bitmap.Config.ARGB_8888
-            )
-            val canvas = Canvas(bitmap)
-            drawable.setBounds(0, 0, canvas.width, canvas.height)
-            drawable.draw(canvas)
-            bitmap
+
+        incidentRepository.incidentResponseLiveData.observe(viewLifecycleOwner){
+            if (it.incidents != null && it.incidents.isNotEmpty()) {
+                addIncidentAnnotations(it.incidents)
+            }
         }
     }
 
+    private fun addIncidentAnnotations(incidents: List<Incident>) {
+        incidents.forEach {
+            Log.d("MAIN FRAGMENT", it.incidentType?.image.toString())
+            val annotationManager = binding.mapView.annotations
+            val pointAnnotationManager = annotationManager.createPointAnnotationManager()
 
+            Glide.with(this).asBitmap().circleCrop().load(RetrofitInstance.BASE_URL + (it.incidentType?.marker
+                ?: "storage/images/default-marker.png")).into(object : CustomTarget<Bitmap?>() {
+                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap?>?) {
+                    val pointAnnotationOptions: PointAnnotationOptions = PointAnnotationOptions()
+                        .withPoint(Point.fromLngLat(
+                            it.longitude?.toDouble() ?: 0.0,
+                            it.latitude?.toDouble() ?: 0.0
+                        ))
+                        .withIconImage(resource)
+                        .withIconSize(1.0)
+                        .withDraggable(true)
 
+                    pointAnnotationManager.create(pointAnnotationOptions)
+                }
+                override fun onLoadCleared(placeholder: Drawable?) {}
+            })
 
+        }
+    }
 
 
 
@@ -158,7 +164,6 @@ class PlaceholderFragment : Fragment(), OnMapClickListener {
 
 
     private fun setupGesturesListener() {
-        binding.mapView.gestures.addOnMapClickListener(this)
         binding.mapView.gestures.addOnMoveListener(onMoveListener)
     }
 

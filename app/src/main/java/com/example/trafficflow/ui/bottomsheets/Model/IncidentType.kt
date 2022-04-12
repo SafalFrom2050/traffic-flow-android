@@ -17,7 +17,9 @@ data class IncidentType(
     val createdAt: Any?,
 
     @SerializedName("updated_at")
-    val updatedAt: Any?
+    val updatedAt: Any?,
+
+    val marker: String?
 ) {
-    constructor(name: String, image: String, defaultSeverity: Int) : this(null, name, image, defaultSeverity, null, null)
+    constructor(name: String, image: String, defaultSeverity: Int) : this(null, name, image, defaultSeverity, null, null, null)
 }

@@ -1,5 +1,8 @@
 package com.example.trafficflow.ui.incident.Model
 
+import com.example.trafficflow.ui.bottomsheets.Model.IncidentType
+import com.google.gson.annotations.SerializedName
+
 data class Incident(
     val id: Int?,
     val name: String?,
@@ -15,6 +18,9 @@ data class Incident(
 
     val updated_at: Any?,
     val created_at: Any?,
+
+    @SerializedName("incident_type")
+    val incidentType: IncidentType?
 ){
     constructor(
         name: String,
@@ -25,5 +31,5 @@ data class Incident(
         severity: Int,
         incident_type_id: Int,
         user_id: Int?
-    ): this(null, name, description, latitude, longitude, device_identifier, severity, incident_type_id, user_id, null, null)
+    ): this(null, name, description, latitude, longitude, device_identifier, severity, incident_type_id, user_id, null, null, null)
 }
