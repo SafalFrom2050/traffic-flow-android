@@ -25,6 +25,7 @@
         android:layout_marginTop="32dp"
         android:background="@drawable/trip_switch_background"
         android:clickable="true"
+        android:foreground="@drawable/image_on_pressed"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"

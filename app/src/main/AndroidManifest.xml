@@ -8,6 +8,8 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -16,6 +18,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TrafficFlow"
         android:usesCleartextTraffic="true">
+        <service
+            android:name=".services.TripModeService"
+            android:enabled="true"
+            android:exported="true"></service>
+
         <activity
             android:name=".EditProfileActivity"
             android:exported="false" />
@@ -38,7 +45,7 @@
         </activity>
         <activity
             android:name=".auth.View.AuthActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
     </application>
 
 </manifest>

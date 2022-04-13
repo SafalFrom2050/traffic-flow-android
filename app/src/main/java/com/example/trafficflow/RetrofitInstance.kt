@@ -4,6 +4,7 @@ import android.content.Context
 import com.example.trafficflow.auth.AuthApi
 import com.example.trafficflow.auth.Model.User
 import com.example.trafficflow.auth.Repository.UserRepository
+import com.example.trafficflow.services.TripModeApi
 import com.example.trafficflow.ui.achievements.AchievementApi
 import com.example.trafficflow.ui.bottomsheets.IncidentTypeApi
 import com.example.trafficflow.ui.incident.IncidentApi
@@ -12,7 +13,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitInstance {
 
-    const val BASE_URL = "http://192.168.241.12:8000/"
+    const val BASE_URL = "http://192.168.1.72:8000/"
     var accessToken: String = ""
     var currentUser: User = User()
 
@@ -52,5 +53,13 @@ object RetrofitInstance {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(AchievementApi::class.java)
+    }
+
+    val tripModeApi: TripModeApi by lazy {
+        Retrofit.Builder()
+            .baseUrl(BASE_URL + "api/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(TripModeApi::class.java)
     }
 }

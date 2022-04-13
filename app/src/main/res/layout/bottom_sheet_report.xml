@@ -113,6 +113,24 @@
             app:layout_constraintTop_toBottomOf="@id/rvIncidentTypes"
             app:showText="false"
             app:thumbTint="@color/background_dark" />
+
+        <TextView
+            android:id="@+id/labelWarning"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center_horizontal|top"
+            android:padding="4dp"
+            android:text="Warning"
+            android:textAlignment="center"
+            android:textColor="@color/error"
+            android:textEditSideNoPasteWindowLayout="@android:layout/browser_link_context_header"
+            android:textSize="14sp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@+id/switchTripMode"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/switchTripMode" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
