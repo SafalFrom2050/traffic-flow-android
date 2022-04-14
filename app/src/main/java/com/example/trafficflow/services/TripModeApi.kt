@@ -1,13 +1,9 @@
 package com.example.trafficflow.services
 
-import android.location.Location
-import com.example.trafficflow.auth.Model.User
 import com.example.trafficflow.roadtrip.Model.LocationData
 import com.example.trafficflow.roadtrip.Model.RoadTrip
 import com.example.trafficflow.roadtrip.Model.RoadTripResponse
 import com.example.trafficflow.roadtrip.Model.RoadTripsResponse
-import com.mapbox.geojson.GeoJson
-import org.json.JSONObject
 import retrofit2.Response
 import retrofit2.http.*
 

@@ -13,10 +13,12 @@
         <entry key="..\:/Android_Projects/TrafficFlow/app/src/main/res/layout/activity_achievements.xml" value="0.2222222222222222" />
         <entry key="..\:/Android_Projects/TrafficFlow/app/src/main/res/layout/activity_add_incident.xml" value="0.2222222222222222" />
         <entry key="..\:/Android_Projects/TrafficFlow/app/src/main/res/layout/activity_edit_profile.xml" value="0.2222222222222222" />
+        <entry key="..\:/Android_Projects/TrafficFlow/app/src/main/res/layout/activity_false_report.xml" value="0.2222222222222222" />
         <entry key="..\:/Android_Projects/TrafficFlow/app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="..\:/Android_Projects/TrafficFlow/app/src/main/res/layout/activity_main.xml" value="0.2359375" />
         <entry key="..\:/Android_Projects/TrafficFlow/app/src/main/res/layout/activity_report.xml" value="0.2222222222222222" />
         <entry key="..\:/Android_Projects/TrafficFlow/app/src/main/res/layout/bottom_sheet_account.xml" value="0.20512820512820512" />
+        <entry key="..\:/Android_Projects/TrafficFlow/app/src/main/res/layout/bottom_sheet_incident_details.xml" value="0.2222222222222222" />
         <entry key="..\:/Android_Projects/TrafficFlow/app/src/main/res/layout/bottom_sheet_report.xml" value="0.2" />
         <entry key="..\:/Android_Projects/TrafficFlow/app/src/main/res/layout/fragment_dashboard.xml" value="0.25" />
         <entry key="..\:/Android_Projects/TrafficFlow/app/src/main/res/layout/fragment_home.xml" value="0.25" />

@@ -1,5 +1,6 @@
 package com.example.trafficflow.ui.main
 
+import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -9,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
@@ -16,14 +18,17 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
-import com.example.trafficflow.R
-import com.example.trafficflow.RetrofitInstance
+import com.example.trafficflow.*
+import com.example.trafficflow.auth.Model.User
 import com.example.trafficflow.databinding.FragmentMainBinding
 import com.example.trafficflow.roadtrip.Repository.RoadTripRepository
 import com.example.trafficflow.ui.incident.Model.Incident
 import com.example.trafficflow.ui.incident.Repository.IncidentRepository
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.gson.JsonElement
 import com.mapbox.android.gestures.MoveGestureDetector
 import com.mapbox.geojson.*
 import com.mapbox.maps.CameraOptions
@@ -42,6 +47,7 @@ import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
 import com.mapbox.maps.extension.style.sources.generated.geoJsonSource
 import com.mapbox.maps.plugin.LocationPuck2D
 import com.mapbox.maps.plugin.annotation.annotations
+import com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import com.mapbox.maps.plugin.gestures.OnMoveListener
@@ -65,6 +71,7 @@ import kotlinx.coroutines.launch
  */
 class PlaceholderFragment : Fragment() {
 
+    private val TAG = "MapboxFragment"
     private lateinit var pageViewModel: PageViewModel
 
     lateinit var binding: FragmentMainBinding
@@ -150,8 +157,6 @@ class PlaceholderFragment : Fragment() {
 
             it.addLayer(heatmapLayer("heatmap-layer", "traffic"){
 
-
-
                 heatmapIntensity(
                     interpolate {
                         linear()
@@ -215,13 +220,12 @@ class PlaceholderFragment : Fragment() {
     }
 
     private fun addIncidentAnnotations(incidents: List<Incident>) {
-        incidents.forEach {
-            Log.d("MAIN FRAGMENT", it.incidentType?.image.toString())
+        incidents.forEach { incident ->
             val annotationManager = binding.mapView.annotations
             val pointAnnotationManager = annotationManager.createPointAnnotationManager()
 
             Glide.with(this).asBitmap().circleCrop().load(
-                RetrofitInstance.BASE_URL + (it.incidentType?.marker
+                RetrofitInstance.BASE_URL + (incident.incidentType?.marker
                     ?: "storage/images/default-marker.png")
             ).into(object : CustomTarget<Bitmap?>() {
                 override fun onResourceReady(
@@ -231,14 +235,20 @@ class PlaceholderFragment : Fragment() {
                     val pointAnnotationOptions: PointAnnotationOptions = PointAnnotationOptions()
                         .withPoint(
                             Point.fromLngLat(
-                                it.longitude?.toDouble() ?: 0.0,
-                                it.latitude?.toDouble() ?: 0.0
+                                incident.longitude?.toDouble() ?: 0.0,
+                                incident.latitude?.toDouble() ?: 0.0
                             )
                         )
                         .withIconImage(resource)
                         .withIconSize(1.0)
 
                     pointAnnotationManager.create(pointAnnotationOptions)
+                    pointAnnotationManager.addClickListener(OnPointAnnotationClickListener {
+
+                        // TODO: Show incident details bottomsheet/screen
+                        showIncidentDetailsDialog(incident)
+                        false
+                    })
                 }
 
                 override fun onLoadCleared(placeholder: Drawable?) {}
@@ -247,6 +257,36 @@ class PlaceholderFragment : Fragment() {
         }
     }
 
+    private fun showIncidentDetailsDialog(incident: Incident){
+        val user: User = RetrofitInstance.currentUser
+        val dialog = BottomSheetDialog(requireActivity(), R.style.DialogTheme)
+        val view = layoutInflater.inflate(R.layout.bottom_sheet_incident_details, null)
+
+        dialog.setContentView(view)
+
+        dialog.show()
+
+        val imageIncident: ImageView? = dialog.findViewById(R.id.imageIncident)
+
+        val y = Glide.with(this).load(RetrofitInstance.BASE_URL + incident.incidentType?.image)
+            .apply(RequestOptions.circleCropTransform()).into(imageIncident!!)
+
+        dialog.findViewById<TextView>(R.id.labelIncidentName)?.text = incident.incidentType?.name
+        dialog.findViewById<TextView>(R.id.textIncidentSeverity)?.text = incident.severity.toString()
+        dialog.findViewById<TextView>(R.id.textIncidentDescription)?.text = incident.description
+
+        // TODO
+        dialog.findViewById<View>(R.id.buttonReport)?.setOnClickListener {
+            val i = Intent(requireActivity(), FalseReportActivity::class.java)
+            i.putExtra(FalseReportActivity.INCIDENT_ID, incident.id)
+            startActivity(i)
+        }
+//
+//        dialog.findViewById<View>(R.id.menuEditProfile)?.setOnClickListener{
+//            val i = Intent(requireActivity(), EditProfileActivity::class.java)
+//            startActivity(i)
+//        }
+    }
 
     private fun setupGesturesListener() {
         binding.mapView.gestures.addOnMoveListener(onMoveListener)

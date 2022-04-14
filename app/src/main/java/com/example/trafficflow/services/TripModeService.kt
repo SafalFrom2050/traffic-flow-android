@@ -36,7 +36,7 @@ import kotlinx.coroutines.launch
 class TripModeService : LifecycleService() {
 
     companion object {
-        val roadTripLiveData = MutableLiveData<RoadTripResponse>()
+        val roadTripLiveData = MutableLiveData<RoadTripResponse>(null)
         val isOnTripModeLiveData = MutableLiveData<Boolean>(false)
         val warningLiveData = MutableLiveData<String?>(null)
     }
@@ -60,10 +60,53 @@ class TripModeService : LifecycleService() {
                     warningLiveData.value = null
                 }
             }
+            handleNewLocation(locationMatcherResult);
+
         }
 
         override fun onNewRawLocation(rawLocation: Location) {
             //TODO
+        }
+    }
+
+    private fun handleNewLocation(locationMatcherResult: LocationMatcherResult) {
+        if (roadTripLiveData.value == null) {
+            createRoadTrip("Kathmandu")
+        }else{
+            linkToTripIdAndPushLocationData(
+                LocationData(
+                    latitude = locationMatcherResult.enhancedLocation.latitude.toString(),
+                    longitude = locationMatcherResult.enhancedLocation.longitude.toString(),
+                    road_trip_id = roadTripLiveData.value?.roadTrip?.id,
+                    speed = locationMatcherResult.enhancedLocation.speed.toString()
+                )
+            )
+        }
+    }
+
+    private fun createRoadTrip(startingPoint: String) {
+        val roadTrip = RoadTrip(
+            user_id = RetrofitInstance.currentUser.id,
+            vehicle_id = null,
+            starting_point = startingPoint
+        )
+        Log.d(TAG, "Creating road trip: " + roadTrip)
+
+        lifecycleScope.launch {
+            roadTripRepository.createRoadTrips(roadTrip)
+        }
+
+        roadTripRepository.createdRoadTripLiveData.observe(this) {
+            if(it?.roadTrip != null) {
+                roadTripLiveData.value = it
+            }
+        }
+    }
+
+    private fun linkToTripIdAndPushLocationData(locationData: LocationData) {
+        locationData.road_trip_id = roadTripLiveData.value?.roadTrip?.id
+        lifecycleScope.launch {
+            roadTripRepository.pushLocationData(locationData)
         }
     }
 
@@ -99,25 +142,6 @@ class TripModeService : LifecycleService() {
         initMapboxNavigation()
         isOnTripModeLiveData.postValue(true)
         return START_NOT_STICKY
-    }
-
-    private fun createRoadTrip() {
-        val roadTrip = RoadTrip(
-            user_id = RetrofitInstance.currentUser.id,
-            vehicle_id = null,
-            starting_point = "Kathmandu"
-        )
-
-        lifecycleScope.launch {
-            roadTripRepository.createRoadTrips(roadTrip)
-        }
-    }
-
-    private fun linkToTripIdAndPushLocationData(locationData: LocationData) {
-        locationData.road_trip_id = roadTripLiveData.value?.roadTrip?.id
-        lifecycleScope.launch {
-            roadTripRepository.pushLocationData(locationData)
-        }
     }
 
     private fun createNotification(pendingIntent: PendingIntent) {

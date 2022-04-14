@@ -4,6 +4,7 @@ import android.content.Context
 import com.example.trafficflow.auth.AuthApi
 import com.example.trafficflow.auth.Model.User
 import com.example.trafficflow.auth.Repository.UserRepository
+import com.example.trafficflow.falsereport.FalseReportApi
 import com.example.trafficflow.services.TripModeApi
 import com.example.trafficflow.ui.achievements.AchievementApi
 import com.example.trafficflow.ui.bottomsheets.IncidentTypeApi
@@ -61,5 +62,13 @@ object RetrofitInstance {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(TripModeApi::class.java)
+    }
+
+    val falseReportApi: FalseReportApi by lazy {
+        Retrofit.Builder()
+            .baseUrl(BASE_URL + "api/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(FalseReportApi::class.java)
     }
 }
