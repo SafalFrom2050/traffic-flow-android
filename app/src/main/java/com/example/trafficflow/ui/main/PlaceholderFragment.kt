@@ -3,10 +3,8 @@ package com.example.trafficflow.ui.main
 import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Bitmap
-import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +12,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
@@ -28,22 +25,14 @@ import com.example.trafficflow.roadtrip.Repository.RoadTripRepository
 import com.example.trafficflow.ui.incident.Model.Incident
 import com.example.trafficflow.ui.incident.Repository.IncidentRepository
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.gson.JsonElement
 import com.mapbox.android.gestures.MoveGestureDetector
 import com.mapbox.geojson.*
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.Style
 import com.mapbox.maps.extension.style.expressions.dsl.generated.*
-import com.mapbox.maps.extension.style.expressions.generated.Expression.Companion.linear
-import com.mapbox.maps.extension.style.expressions.generated.Expression.Companion.rgba
 import com.mapbox.maps.extension.style.layers.addLayer
-import com.mapbox.maps.extension.style.layers.generated.circleLayer
 import com.mapbox.maps.extension.style.layers.generated.heatmapLayer
-import com.mapbox.maps.extension.style.layers.generated.lineLayer
-import com.mapbox.maps.extension.style.layers.properties.generated.LineCap
-import com.mapbox.maps.extension.style.layers.properties.generated.LineJoin
 import com.mapbox.maps.extension.style.sources.addSource
-import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
 import com.mapbox.maps.extension.style.sources.generated.geoJsonSource
 import com.mapbox.maps.plugin.LocationPuck2D
 import com.mapbox.maps.plugin.annotation.annotations
@@ -56,12 +45,6 @@ import com.mapbox.maps.plugin.locationcomponent.OnIndicatorBearingChangedListene
 import com.mapbox.maps.plugin.locationcomponent.OnIndicatorPositionChangedListener
 import com.mapbox.maps.plugin.locationcomponent.location
 import com.mapbox.navigation.core.MapboxNavigationProvider
-import com.mapbox.navigation.core.directions.session.RoutesObserver
-import com.mapbox.navigation.ui.maps.route.line.api.MapboxRouteLineApi
-import com.mapbox.navigation.ui.maps.route.line.model.MapboxRouteLineOptions
-import com.mapbox.navigation.ui.maps.route.line.model.RouteLine
-import com.mapbox.navigation.ui.maps.route.line.model.RouteLineColorResources
-import com.mapbox.navigation.ui.maps.route.line.model.RouteLineResources
 
 
 import kotlinx.coroutines.launch
@@ -96,11 +79,6 @@ class PlaceholderFragment : Fragment() {
         binding = FragmentMainBinding.inflate(inflater, container, false)
         val root = binding.root
 
-        val textView: TextView = binding.sectionLabel
-        pageViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
-
         return root
     }
 
@@ -113,7 +91,11 @@ class PlaceholderFragment : Fragment() {
         setupGesturesListener()
         //
 
-        getIncidents()
+        if(pageViewModel._index.value == 1){
+            loadTrafficHeatmaps()
+        }else if(pageViewModel._index.value == 2){
+            getIncidents()
+        }
     }
 
     private fun initLocationComponent() {
@@ -142,12 +124,9 @@ class PlaceholderFragment : Fragment() {
         locationComponentPlugin.addOnIndicatorPositionChangedListener(
             onIndicatorPositionChangedListener
         )
-        //locationComponentPlugin.addOnIndicatorBearingChangedListener(onIndicatorBearingChangedListener)
+    }
 
-//        lifecycleScope.launch {
-//            roadTripRepository.getGeoJson()
-//        }
-
+    private fun loadTrafficHeatmaps(){
         binding.mapView.getMapboxMap().getStyle {
             it.addSource(
                 geoJsonSource("traffic"){
@@ -276,12 +255,27 @@ class PlaceholderFragment : Fragment() {
         dialog.findViewById<TextView>(R.id.textIncidentDescription)?.text = incident.description
 
         // TODO
-        dialog.findViewById<View>(R.id.buttonReport)?.setOnClickListener {
+        dialog.findViewById<View>(R.id.btnReport)?.setOnClickListener {
             val i = Intent(requireActivity(), FalseReportActivity::class.java)
             i.putExtra(FalseReportActivity.INCIDENT_ID, incident.id)
+            i.putExtra(FalseReportActivity.INCIDENT_NAME, incident.incidentType?.name)
+            i.putExtra(FalseReportActivity.INCIDENT_IMAGE_URL, incident.incidentType?.marker)
+            i.putExtra(FalseReportActivity.INCIDENT_LATITUDE, incident.latitude)
+            i.putExtra(FalseReportActivity.INCIDENT_LONGITUDE, incident.longitude)
+            startActivity(i)
+        }
+
+        dialog.findViewById<View>(R.id.btnViewReports)?.setOnClickListener {
+            val i = Intent(requireActivity(), FalseReportsActivity::class.java)
+            i.putExtra(FalseReportActivity.INCIDENT_ID, incident.id)
+            i.putExtra(FalseReportActivity.INCIDENT_NAME, incident.incidentType?.name)
+            i.putExtra(FalseReportActivity.INCIDENT_IMAGE_URL, incident.incidentType?.marker)
             startActivity(i)
         }
 //
+
+
+
 //        dialog.findViewById<View>(R.id.menuEditProfile)?.setOnClickListener{
 //            val i = Intent(requireActivity(), EditProfileActivity::class.java)
 //            startActivity(i)
@@ -327,9 +321,9 @@ class PlaceholderFragment : Fragment() {
         val mapbox = binding.mapView.getMapboxMap()
 
         val style: String = if (isDarkModeOn()) {
-            Style.TRAFFIC_NIGHT
+            Style.DARK
         } else {
-            Style.TRAFFIC_DAY
+            Style.LIGHT
         }
 
         mapbox.loadStyleUri(style)

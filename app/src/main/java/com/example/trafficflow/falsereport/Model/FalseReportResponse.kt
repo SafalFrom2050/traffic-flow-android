@@ -1,7 +1,10 @@
 package com.example.trafficflow.falsereport.Model
 
+import com.google.gson.annotations.SerializedName
+
 data class FalseReportResponse(
-    var falseReports: FalseReport?,
+    @SerializedName("false_report")
+    var falseReport: FalseReport?,
     var count: Int?,
     var message: String?
 ) {

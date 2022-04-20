@@ -18,6 +18,9 @@
         android:theme="@style/Theme.TrafficFlow"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".FalseReportsActivity"
+            android:exported="false" />
+        <activity
             android:name=".FalseReportActivity"
             android:exported="false" />
 

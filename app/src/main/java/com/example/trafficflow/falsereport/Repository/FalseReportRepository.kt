@@ -19,11 +19,12 @@ class FalseReportRepository {
     val falseReportResponseLiveData = MutableLiveData<FalseReportResponse>()
     val falseReportsResponseLiveData = MutableLiveData<FalseReportsResponse>()
 
-    suspend fun getFalseReports(): Boolean {
+    suspend fun getFalseReports(incidentId: String): Boolean {
         val accessToken: String = RetrofitInstance.accessToken
 
+        Log.d("API", incidentId.toString())
         val response = try {
-            RetrofitInstance.falseReportApi.getFalseReports(accessToken)
+            RetrofitInstance.falseReportApi.getFalseReports(accessToken, incidentId)
         }catch (e: IOException) {
             Log.e(TAG, "IO Exception: " + e.message)
             postUnexpectedError(true, "" + e.message)
@@ -42,13 +43,17 @@ class FalseReportRepository {
         } else {
             val jsonObj = JSONObject(response.errorBody()!!.charStream().readText())
             falseReportsResponseLiveData.value =
-                Gson().fromJson(jsonObj.toString(), FalseReportsResponse::class.java)        }
+                Gson().fromJson(jsonObj.toString(), FalseReportsResponse::class.java)
+        }
 
         return false
     }
 
-    suspend fun addFalseReports(falseReport: FalseReport): Boolean {
+    suspend fun addFalseReport(falseReport: FalseReport): Boolean {
         val accessToken: String = RetrofitInstance.accessToken
+        Log.d("API", falseReport.toString());
+
+        isLoadingLiveData.value = true
 
         val response = try {
             RetrofitInstance.falseReportApi.addFalseReport(accessToken, falseReport)

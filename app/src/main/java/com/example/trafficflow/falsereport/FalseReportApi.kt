@@ -22,6 +22,6 @@ interface FalseReportApi {
         "User-Agent: TrafficFlow",
     )
     @GET("false_reports")
-    suspend fun getFalseReports(@Header("Authorization") accessToken: String): Response<FalseReportsResponse>
+    suspend fun getFalseReports(@Header("Authorization") accessToken: String,  @Query("incident_id") incidentId: String): Response<FalseReportsResponse>
 
 }

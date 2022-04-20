@@ -14,7 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitInstance {
 
-    const val BASE_URL = "http://192.168.1.72:8000/"
+    const val BASE_URL = "https://app-traffic-flow.herokuapp.com/"
     var accessToken: String = ""
     var currentUser: User = User()
 
