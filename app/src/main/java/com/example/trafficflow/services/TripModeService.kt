@@ -23,6 +23,7 @@ import com.example.trafficflow.roadtrip.Model.RoadTrip
 import com.example.trafficflow.roadtrip.Model.RoadTripResponse
 import com.example.trafficflow.roadtrip.Model.RoadTripsResponse
 import com.example.trafficflow.roadtrip.Repository.RoadTripRepository
+import com.example.trafficflow.ui.bottomsheets.Model.VehicleResponse
 import com.mapbox.navigation.core.MapboxNavigation
 import com.mapbox.navigation.core.MapboxNavigationProvider
 import com.mapbox.navigation.core.trip.session.LocationMatcherResult
@@ -36,9 +37,11 @@ import kotlinx.coroutines.launch
 class TripModeService : LifecycleService() {
 
     companion object {
-        val roadTripLiveData = MutableLiveData<RoadTripResponse>(null)
+        val roadTripLiveData = MutableLiveData<RoadTripResponse?>(null)
         val isOnTripModeLiveData = MutableLiveData<Boolean>(false)
+        val isVehicleSelectedLiveData = MutableLiveData<Boolean>(false)
         val warningLiveData = MutableLiveData<String?>(null)
+        val vehicleResponseLiveData = MutableLiveData<VehicleResponse>(null)
     }
 
     val TAG = "TripModeService"
@@ -70,7 +73,7 @@ class TripModeService : LifecycleService() {
     }
 
     private fun handleNewLocation(locationMatcherResult: LocationMatcherResult) {
-        if (roadTripLiveData.value == null) {
+        if (roadTripLiveData.value == null && roadTripRepository.isLoadingLiveData.value != null && !roadTripRepository.isLoadingLiveData.value!!) {
             createRoadTrip("Kathmandu")
         }else{
             linkToTripIdAndPushLocationData(
@@ -178,8 +181,11 @@ class TripModeService : LifecycleService() {
 
     override fun onDestroy() {
         super.onDestroy()
+        roadTripLiveData.postValue(null)
         warningLiveData.postValue(null)
         isOnTripModeLiveData.postValue(false)
+        isVehicleSelectedLiveData.postValue(false)
+
         mapboxNavigation.stopTripSession()
         mapboxNavigation.unregisterLocationObserver(locationObserver)
     }

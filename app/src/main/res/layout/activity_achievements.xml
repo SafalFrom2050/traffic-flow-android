@@ -43,6 +43,7 @@
             android:id="@+id/iconAchievement"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:tint="@color/background_dark"
             app:srcCompat="@drawable/ic_achievement" />
 
         <TextView
@@ -51,6 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="8dp"
             android:text="5"
+            android:textColor="@color/background_dark"
             android:textSize="16sp"
             android:textStyle="bold|italic" />
 

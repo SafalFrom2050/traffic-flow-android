@@ -36,6 +36,7 @@
                 android:id="@+id/iconAchievement"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
+                android:tint="@color/background_dark"
                 app:srcCompat="@drawable/ic_achievement" />
 
             <TextView
@@ -44,6 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="8dp"
                 android:text="5"
+                android:textColor="@color/background_dark"
                 android:textSize="16sp"
                 android:textStyle="bold|italic" />
 
@@ -97,14 +99,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:background="@drawable/trip_switch_background"
-            android:drawableStart="@drawable/ic_trip_dark"
+            android:drawableStart="@drawable/ic_trip"
             android:drawablePadding="16dp"
             android:foreground="?android:attr/selectableItemBackground"
             android:paddingHorizontal="40dp"
             android:paddingTop="32dp"
             android:paddingBottom="32dp"
             android:text="Trip Mode"
-            android:textColor="@color/background_dark"
+            android:textColor="@color/background_light"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -112,7 +114,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/rvIncidentTypes"
             app:showText="false"
-            app:thumbTint="@color/background_dark" />
+            app:thumbTint="@color/background_light" />
 
         <TextView
             android:id="@+id/labelWarning"

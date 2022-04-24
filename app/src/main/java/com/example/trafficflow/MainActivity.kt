@@ -68,14 +68,11 @@ class MainActivity : AppCompatActivity() {
     private fun checkAuth() {
         val accessToken = RetrofitInstance.retrieveAccessToken(this)
 
-        Log.d("MainActivity", "Access Token: $accessToken")
         val userRepository = UserRepository()
         if (accessToken != ""){
-            if (RetrofitInstance.currentUser.id == null){
-                lifecycleScope.launch {
-                    val result = userRepository.getCurrentUser(this@MainActivity)
-                    if (!result) redirectAuthActivity()
-                }
+            lifecycleScope.launch {
+                val result = userRepository.getCurrentUser(this@MainActivity)
+                if (!result) redirectAuthActivity()
             }
         }else{
             redirectAuthActivity()
@@ -122,6 +119,10 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    override fun onResume() {
+        super.onResume()
+        checkAuth()
+    }
 
     private fun initMapbox() {
         val navigationOptions = NavigationOptions.Builder(this)

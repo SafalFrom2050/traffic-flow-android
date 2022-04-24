@@ -47,11 +47,16 @@ class ReportBottomSheetFragment: BottomSheetDialogFragment() {
         viewModel = ViewModelProvider(this)[ReportBottomSheetViewModel::class.java]
 
         viewModel.loadIncidentTypes()
+        setUpRewards()
         setUpReportPageRV()
         setErrorMessages()
         setUpUIListeners()
 
         Log.d("BottomSheet", "onViewCreated")
+    }
+
+    private fun setUpRewards() {
+        view?.findViewById<TextView>(R.id.labelReward)?.text = RetrofitInstance.currentUser.rewardPoints.toString()
     }
 
     private fun setUpUIListeners() {
@@ -92,6 +97,15 @@ class ReportBottomSheetFragment: BottomSheetDialogFragment() {
             setSwitchMode(it, switchTripMode)
         }
 
+        TripModeService.roadTripLiveData.observe(this) {
+            if (it?.roadTrip?.id != null) {
+                if (!TripModeService.isVehicleSelectedLiveData.value!!) {
+                    showVehicleDetailsFormPage()
+                    TripModeService.isVehicleSelectedLiveData.value = true
+                }
+            }
+        }
+
         TripModeService.warningLiveData.observe(this) {
             setTripWarning(it, labelWarning, switchTripMode)
         }
@@ -121,6 +135,7 @@ class ReportBottomSheetFragment: BottomSheetDialogFragment() {
             val i = Intent(requireContext(), ReportActivity::class.java)
             i.putExtra(INCIDENT_ID, it.id.toString())
             i.putExtra(INCIDENT_NAME, it.name.toString())
+            i.putExtra(INCIDENT_MARKER, it.marker.toString())
             i.putExtra(INCIDENT_IMAGE_URL, it.image.toString())
             startActivity(i)
         }
@@ -133,6 +148,13 @@ class ReportBottomSheetFragment: BottomSheetDialogFragment() {
         }
 
         recyclerView.adapter = adapter
+    }
+
+    private var isVehicleDetailsFormOpen = false
+    private fun showVehicleDetailsFormPage() {
+        val roadTripBottomSheetFragment = RoadTripBottomSheetFragment()
+        activity?.let { it1 -> roadTripBottomSheetFragment.show(it1.supportFragmentManager, roadTripBottomSheetFragment.tag) }
+
     }
 
     private fun setErrorMessages() {

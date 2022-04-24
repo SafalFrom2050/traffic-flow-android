@@ -20,7 +20,6 @@ class RoadTripRepository {
     val roadTripsResponseLiveData = MutableLiveData<RoadTripsResponse>()
     val createdRoadTripLiveData = MutableLiveData<RoadTripResponse>()
     val geoJsonLiveData = MutableLiveData<String>()
-
     suspend fun getGeoJson(): Boolean {
         val accessToken: String = RetrofitInstance.accessToken
 
@@ -80,6 +79,7 @@ class RoadTripRepository {
     suspend fun createRoadTrips(roadTrip: RoadTrip): Boolean {
         val accessToken: String = RetrofitInstance.accessToken
 
+        isLoadingLiveData.value = true
         val response = try {
             RetrofitInstance.tripModeApi.createRoadTrip(accessToken, roadTrip)
         }catch (e: IOException) {

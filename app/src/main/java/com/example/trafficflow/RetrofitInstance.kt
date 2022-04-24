@@ -8,6 +8,7 @@ import com.example.trafficflow.falsereport.FalseReportApi
 import com.example.trafficflow.services.TripModeApi
 import com.example.trafficflow.ui.achievements.AchievementApi
 import com.example.trafficflow.ui.bottomsheets.IncidentTypeApi
+import com.example.trafficflow.ui.bottomsheets.VehicleApi
 import com.example.trafficflow.ui.incident.IncidentApi
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -15,6 +16,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 object RetrofitInstance {
 
     const val BASE_URL = "https://app-traffic-flow.herokuapp.com/"
+
+//    const val BASE_URL = "http://192.168.1.69:8000/"
     var accessToken: String = ""
     var currentUser: User = User()
 
@@ -62,6 +65,14 @@ object RetrofitInstance {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(TripModeApi::class.java)
+    }
+
+    val vehicleApi: VehicleApi by lazy {
+        Retrofit.Builder()
+            .baseUrl(BASE_URL + "api/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(VehicleApi::class.java)
     }
 
     val falseReportApi: FalseReportApi by lazy {

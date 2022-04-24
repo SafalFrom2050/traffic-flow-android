@@ -49,6 +49,7 @@ import kotlinx.coroutines.launch
 val INCIDENT_ID = "incident_id"
 val INCIDENT_NAME = "incident_name"
 val INCIDENT_IMAGE_URL = "incident_image_url"
+val INCIDENT_MARKER = "incident_marker"
 
 class ReportActivity : AppCompatActivity(), View.OnClickListener, OnMapClickListener {
 
@@ -59,6 +60,7 @@ class ReportActivity : AppCompatActivity(), View.OnClickListener, OnMapClickList
 
     lateinit var binding: ActivityAddIncidentBinding
     lateinit var incidentImageUrl: String
+    lateinit var incidentMarker: String
     lateinit var incidentName: String
     lateinit var incidentId: String
 
@@ -73,6 +75,7 @@ class ReportActivity : AppCompatActivity(), View.OnClickListener, OnMapClickList
         setContentView(binding.root)
 
         incidentImageUrl = intent.getStringExtra(INCIDENT_IMAGE_URL).toString()
+        incidentMarker = intent.getStringExtra(INCIDENT_MARKER).toString()
         incidentName = intent.getStringExtra(INCIDENT_NAME).toString()
         incidentId = intent.getStringExtra(INCIDENT_ID).toString()
 
@@ -152,7 +155,7 @@ class ReportActivity : AppCompatActivity(), View.OnClickListener, OnMapClickList
         annotationManager.cleanup()
         val pointAnnotationManager = annotationManager.createPointAnnotationManager()
 
-        Glide.with(this).asBitmap().load(RetrofitInstance.BASE_URL + "storage/images/default-marker.png").into(object : CustomTarget<Bitmap?>() {
+        Glide.with(this).asBitmap().load(RetrofitInstance.BASE_URL + incidentMarker).into(object : CustomTarget<Bitmap?>() {
             override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap?>?) {
                 val pointAnnotationOptions: PointAnnotationOptions = PointAnnotationOptions()
                     .withPoint(point)
@@ -203,7 +206,8 @@ class ReportActivity : AppCompatActivity(), View.OnClickListener, OnMapClickList
             return false
         }
 
-        override fun onMoveEnd(detector: MoveGestureDetector) {}
+        override fun onMoveEnd(detector: MoveGestureDetector) {
+        }
     }
 
 

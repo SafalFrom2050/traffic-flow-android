@@ -5,6 +5,7 @@ import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,6 +35,7 @@ import com.mapbox.maps.extension.style.layers.addLayer
 import com.mapbox.maps.extension.style.layers.generated.heatmapLayer
 import com.mapbox.maps.extension.style.sources.addSource
 import com.mapbox.maps.extension.style.sources.generated.geoJsonSource
+import com.mapbox.maps.extension.style.sources.getSource
 import com.mapbox.maps.plugin.LocationPuck2D
 import com.mapbox.maps.plugin.annotation.annotations
 import com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener
@@ -127,7 +129,11 @@ class PlaceholderFragment : Fragment() {
     }
 
     private fun loadTrafficHeatmaps(){
+
         binding.mapView.getMapboxMap().getStyle {
+            it.removeStyleLayer("heatmap-layer")
+            it.removeStyleSource("traffic")
+
             it.addSource(
                 geoJsonSource("traffic"){
                     url(RetrofitInstance.BASE_URL + "api/geojson")
@@ -223,10 +229,11 @@ class PlaceholderFragment : Fragment() {
 
                     pointAnnotationManager.create(pointAnnotationOptions)
                     pointAnnotationManager.addClickListener(OnPointAnnotationClickListener {
-
-                        // TODO: Show incident details bottomsheet/screen
-                        showIncidentDetailsDialog(incident)
-                        false
+                        if(!showingIncidentDetailsDialog){
+                            showIncidentDetailsDialog(incident)
+                            showingIncidentDetailsDialog = true
+                        }
+                        true
                     })
                 }
 
@@ -236,6 +243,7 @@ class PlaceholderFragment : Fragment() {
         }
     }
 
+    var showingIncidentDetailsDialog = false
     private fun showIncidentDetailsDialog(incident: Incident){
         val user: User = RetrofitInstance.currentUser
         val dialog = BottomSheetDialog(requireActivity(), R.style.DialogTheme)
@@ -271,6 +279,10 @@ class PlaceholderFragment : Fragment() {
             i.putExtra(FalseReportActivity.INCIDENT_NAME, incident.incidentType?.name)
             i.putExtra(FalseReportActivity.INCIDENT_IMAGE_URL, incident.incidentType?.marker)
             startActivity(i)
+        }
+
+        dialog.setOnDismissListener {
+            showingIncidentDetailsDialog = false
         }
 //
 
@@ -340,6 +352,16 @@ class PlaceholderFragment : Fragment() {
     private fun isDarkModeOn(): Boolean {
         val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         return currentNightMode == Configuration.UI_MODE_NIGHT_YES
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d(TAG, "onResume");
+        if(pageViewModel._index.value == 1){
+            loadTrafficHeatmaps()
+        }else if(pageViewModel._index.value == 2){
+            getIncidents()
+        }
     }
 
     companion object {

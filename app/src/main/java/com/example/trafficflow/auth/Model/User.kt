@@ -17,7 +17,7 @@ data class User(
     val id: Int?,
 
     @SerializedName("is_approved")
-    val isApproved: Boolean?,
+    val isApproved: String?,
     val lname: String,
     val phone: String,
 

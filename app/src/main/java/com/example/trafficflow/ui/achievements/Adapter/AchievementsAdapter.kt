@@ -29,6 +29,9 @@ class AchievementsAdapter(private val achievementList: List<Achievement>):
 
         if (RetrofitInstance.currentUser.rewardPoints >= achievementList[position].pointsRequired) {
             holder.layout.setBackgroundColor(holder.layout.context.resources.getColor(R.color.secondary))
+            holder.labelName.setTextColor(holder.layout.context.resources.getColor(R.color.background_dark))
+            holder.labelLevel.setTextColor(holder.layout.context.resources.getColor(R.color.background_dark))
+            holder.labelRequiredPoints.setTextColor(holder.layout.context.resources.getColor(R.color.background_dark))
         }
     }
 
